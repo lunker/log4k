@@ -5,6 +5,7 @@
 #ifndef LOG4K_LOGGER_HPP
 #define LOG4K_LOGGER_HPP
 
+//#include <glib.h>
 #include <boost/log/sources/global_logger_storage.hpp>
 #include <boost/log/expressions/keyword.hpp>
 #include <boost/log/sources/severity_channel_logger.hpp>
@@ -34,6 +35,7 @@ typedef src::severity_channel_logger_mt <
         std::string         // the type of the channel name
 > m_logger_mt;
 
+
 BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT (stat_logger, m_logger_mt)
 {
     m_logger_mt stat_logger (keywords::channel = "stat");
@@ -57,7 +59,11 @@ public:
     void DEBUG(std::string channel, std::string message);
     void INFO();
     void LOG(std::string &level, std::string &message);
+    static void TEST_LOG();
 private:
-
-
+    m_logger_mt test_logger;
 };
+namespace test {
+    inline m_logger_mt test_logger2(keywords::channel="test");
+    void test_logger2_debug(char* message);
+}
