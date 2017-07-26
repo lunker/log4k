@@ -7,6 +7,7 @@ set(PROJECT_NAME log4k)
 set(haha hahaaaaaa CACHE INTERNAL "test for variable")
 set(CUSTOM_HINTS ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME})
 #add_subdirectory(src)
+include (GNUInstallDirs)
 
 # Debug message for cmake
 message("cmake_source_dir : ${CMAKE_SOURCE_DIR}")
@@ -79,7 +80,7 @@ else()
 #        TODO:: change hardcoding install path to platform configurable
     set(LOG4K_INSTALL_DIR /Users/voiceloco/work/cppworkspace/log4k/build)
 
-    add_library(log4k SHARED ${LOG4K_HEADER_FILES} ${LOG4K_SOURCE_FILES}) # create log4k as shared library
+    add_library(log4k SHARED ${LOG4K_SOURCE_FILES}) # create log4k as shared library
         if(APPLE)
             message("Platform : 'osx' (i386)")
             set_target_properties(log4k PROPERTIES
@@ -101,11 +102,13 @@ else()
     message("### CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
 
     set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
+
     set (CMAKE_MODULES_INSTALL_DIR
             ${CMAKE_INSTALL_DATAROOTDIR}/cmake-${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/Modules
             CACHE STRING
             "Destination (relative to CMAKE_INSTALL_PREFIX) for cmake modules files"
             )
+		message ("CMAKE_MODULES_INSTALL_DIR : ${CMAKE_MODULES_INSTALL_DIR}")
 
     install(
             TARGETS log4k
@@ -134,11 +137,12 @@ else()
     # Generate find_package cmake file
     configure_file(
             Findlog4k.cmake.in ${CMAKE_BINARY_DIR}/Findlog4k.cmake @ONLY
+#            Findlog4k.cmake.in /${CMAKE_MODULES_INSTALL_DIR}/Findlog4k.cmake @ONLY
     )
 
     install(FILES
             ${CMAKE_BINARY_DIR}/Findlog4k.cmake
-            DESTINATION ${CMAKE_MODULES_INSTALL_DIR}
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_MODULES_INSTALL_DIR}
     )
 # end release mode
 endif()
