@@ -16,7 +16,7 @@ find_path(LOG4K_INCLUDE_DIR
   HINTS
     @CUSTOM_HINTS@
 )
-message("LOG4K_INCLUDE_DIR: ${log4k_INCLUDE_DIR}")
+message("LOG4K_INCLUDE_DIR: ${LOG4K_INCLUDE_DIR}")
 
 # set (LOG4K_BINARY_DIR_PREFIX "build" CACHE PATH "Path prefix used to look for binary files")
 
@@ -26,17 +26,16 @@ set(LOG4K_INCLUDE_DIRS ${LOG4K_INCLUDE_DIR}
 
 if (TARGET LOG4K)
   #Just get the target for the library
-  set (LOG4K_LIBRARY log4k)
+  set (LOG4K_LIBRARY LOG4K)
 else ()
-
-message("LOG4K_BINARY_DIR_PREFIX : ${LOG4K_BINARY_DIR_PREFIX}")
-  find_library (LOG4K_LIBRARY
-    NAMES
-      LOG4K
-    PATH_SUFFIXES
-      ${LOG4K_BINARY_DIR_PREFIX}
-  )
-
+	find_library (LOG4K_LIBRARY
+		NAMES
+			log4k
+		PATH_SUFFIXES
+			${CMAKE_INSTALL_PREFIX}/lib
+		HINTS
+			${CMAKE_INSTALL_PREFIX}/lib
+	)
 endif ()
 
 set (LOG4K_LIBRARIES ${LOG4K_LIBRARY}

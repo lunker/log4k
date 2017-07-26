@@ -5,17 +5,17 @@ set(PROJECT_VERSION 1.0)
 set(PROJECT_NAME log4k)
 
 set(haha hahaaaaaa CACHE INTERNAL "test for variable")
-set(CUSTOM_HINTS ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME})
 #add_subdirectory(src)
 include (GNUInstallDirs)
 
 # Debug message for cmake
 message("cmake_source_dir : ${CMAKE_SOURCE_DIR}")
-#find_path(test_find_path NAME src/Logger.h HINTS /usr/local/include/log4k)
+find_path(test_find_path NAME src/Logger.h;src/logger_interface.h PATH_SUFFIXES /usr/log4k HINTS /usr/log4k)
 
-#message("test find path : ${test_find_path}")
+message("test find path222333 : ${test_find_path}")
 
-set(CUSTOM_PREFIX "${CMAKE_INSTALL_PREFIX}/include/log4k")
+set(CUSTOM_HINTS ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME} CACHE STRING "CUSTOM_HINTS")
+set(CUSTOM_PREFIX "${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}" CACHE STRING "cmake_prefix")
 #set(INCLUDE_PREFIX "${CMAKE_INSTALL_INCLUDEDIR}/${CUSTOM_PREFIX}/modules/${VALUE_NAME}")
 
 
@@ -86,11 +86,14 @@ else()
             set_target_properties(log4k PROPERTIES
                     COMPILE_FLAGS "-i386"
                     LINK_FLAGS "-i386")
-        else()
-            message("Platform : Others")
+        else(LINUX)
+
+            message("Platform : Linux")
             set_target_properties(log4k PROPERTIES
                     COMPILE_FLAGS "-m64"
                     LINK_FLAGS "-m64")
+				else()
+            message("Platform : Others")
         endif()
 
     target_link_libraries(log4k
@@ -137,7 +140,6 @@ else()
     # Generate find_package cmake file
     configure_file(
             Findlog4k.cmake.in ${CMAKE_BINARY_DIR}/Findlog4k.cmake @ONLY
-#            Findlog4k.cmake.in /${CMAKE_MODULES_INSTALL_DIR}/Findlog4k.cmake @ONLY
     )
 
     install(FILES
