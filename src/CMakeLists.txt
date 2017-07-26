@@ -14,7 +14,7 @@ set(HEADER_FILES
         )
 
 message("cmake source dir : ${CMAKE_SOURCE_DIR}/build}")
-
+message(${CMAKE_INCLUDE_PATH})
 
 FILE(
         MAKE_DIRECTORY

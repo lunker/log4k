@@ -58,7 +58,7 @@ if (DEBUG)
 
     # create runnable binary for test lib
     add_executable(log4k ${SOURCE_FILES})
-    set_target_properties(log4k PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+    set_target_properties(log4k PROPERTIES COMPILE_FLAGS "-m64" LINK_FLAGS "-m64")
     target_link_libraries(log4k
             ${Boost_LIBRARIES}
 #            ${GLIB2_LIBRARIES}
@@ -89,10 +89,9 @@ else()
         else()
             message("Platform : Others")
             set_target_properties(log4k PROPERTIES
-                    COMPILE_FLAGS "-m32"
-                    LINK_FLAGS "-m32")
+                    COMPILE_FLAGS "-m64"
+                    LINK_FLAGS "-m64")
         endif()
-
 
     target_link_libraries(log4k
             ${Boost_LIBRARIES}
@@ -116,6 +115,11 @@ message("### CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
             LIBRARY DESTINATION lib
             ARCHIVE DESTINATION lib
             PUBLIC_HEADER DESTINATION dkdkdk
+    )
+
+    FILE(
+            MAKE_DIRECTORY
+            ${CMAKE_INSTALL_PREFIX}/log4k
     )
 
     FILE(
