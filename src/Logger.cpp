@@ -2,7 +2,7 @@
 // Created by voiceloco on 2017. 7. 21..
 //
 
-#include "Logger.hpp"
+#include "Logger.h"
 
 #include <boost/format.hpp>
 #include <boost/log/sinks/text_file_backend.hpp>
@@ -18,7 +18,7 @@
 #include <unistd.h>
 
 extern "C" {
-#include "../interface/logger_interface.h"
+//#include "../interface/logger_interface.h"
 }
 
 namespace logging = boost::log;
@@ -44,6 +44,11 @@ void init_file_collecting (boost::shared_ptr< sink_t > sink,
             keywords::max_size = (fileSize * fileNumber) * 1024 * 1024,
             keywords::min_free_space = fileSize * 1024 * 1024
     ) );
+}
+
+Logger::Logger() {
+    std::cout<<"Logger Constructor"<<std::endl;
+    init();
 }
 
 void Logger::init() {
@@ -114,4 +119,13 @@ void Logger::DEBUG (std::string channel, std::string message) {
 
 void Logger::LOG(std::string &level, std::string &message) {
 
+}
+
+void Logger::TEST_LOG(char* message) {
+    init();
+    BOOST_LOG_SEV(app_logger::get(), warning) << "WOWOWOWOWOWOWOW";
+    BOOST_LOG_SEV(app_logger::get(), warning) << std::string(message);
+}
+inline void test_logger2_debug(char* message){
+    BOOST_LOG_SEV(test::test_logger2, debug) << message;
 }

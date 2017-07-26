@@ -55,15 +55,17 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT (app_logger, m_logger_mt)
 class Logger {
 
 public:
-    void init();
+    static void init();
+    Logger();
     void DEBUG(std::string channel, std::string message);
     void INFO();
     void LOG(std::string &level, std::string &message);
-    static void TEST_LOG();
+    static void TEST_LOG(char* message);
 private:
     m_logger_mt test_logger;
 };
 namespace test {
     inline m_logger_mt test_logger2(keywords::channel="test");
+
     void test_logger2_debug(char* message);
 }

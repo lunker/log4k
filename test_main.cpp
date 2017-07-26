@@ -3,7 +3,9 @@
 //
 
 #include "iostream"
-#include "src/Logger.hpp"
+#include "src/Logger.h"
+
+#include "src/logger_interface.h"
 
 int main() {
 
@@ -16,4 +18,5 @@ int main() {
     logger.init();
     logger.DEBUG("stat", "hi!");
 
+    log4k_debug("adsf","22");
 }
