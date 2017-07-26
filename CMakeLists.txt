@@ -10,11 +10,11 @@ set(CUSTOM_HINTS ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME})
 
 # Debug message for cmake
 message("cmake_source_dir : ${CMAKE_SOURCE_DIR}")
-find_path(test_find_path NAME src/Logger.h HINTS /usr/local/include/log4k)
+#find_path(test_find_path NAME src/Logger.h HINTS /usr/local/include/log4k)
 
-message("test find path : ${test_find_path}")
+#message("test find path : ${test_find_path}")
 
-set(CUSTOM_PREFIX "/usr/local/include/log4k")
+set(CUSTOM_PREFIX "${CMAKE_INSTALL_PREFIX}/include/log4k")
 #set(INCLUDE_PREFIX "${CMAKE_INSTALL_INCLUDEDIR}/${CUSTOM_PREFIX}/modules/${VALUE_NAME}")
 
 
@@ -98,8 +98,8 @@ else()
 #            ${GLIB2_LIBRARIES}
             )
 
-        message("### CMAKE_INSTALL_INCLUDEDIR : ${CMAKE_INSTALL_INCLUDEDIR}")
-message("### CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
+    message("### CMAKE_INSTALL_INCLUDEDIR : ${CMAKE_INSTALL_INCLUDEDIR}")
+    message("### CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
 
     set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
     set (CMAKE_MODULES_INSTALL_DIR
