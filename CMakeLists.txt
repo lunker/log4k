@@ -57,7 +57,6 @@ if (DEBUG)
     SET_SOURCE_FILES_PROPERTIES(${SOURCE_FILES} PROPERTIES LANGUAGE CXX)
 
     # create runnable binary for test lib
-    add_executable(log4k ${SOURCE_FILES})
     set_target_properties(log4k PROPERTIES COMPILE_FLAGS "-m64" LINK_FLAGS "-m64")
     target_link_libraries(log4k
             ${Boost_LIBRARIES}
