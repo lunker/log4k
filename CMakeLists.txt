@@ -25,7 +25,7 @@ SET(CMAKE_CXX_STANDARD 11)
 # Set Dependencies
 ## Boost
 find_package(Boost REQUIRED)
-find_package(Boost 1.64.0 COMPONENTS system log log_setup)
+find_package(Boost 1.54.0 COMPONENTS system log log_setup)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
