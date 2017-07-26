@@ -60,7 +60,7 @@ void Logger::init() {
     // text-backend for call history
     boost::shared_ptr< sinks::text_file_backend > stat_backend =
             boost::make_shared< sinks::text_file_backend > (
-                    keywords::file_name = path + "/" + "stat_%Y-%m-%d_%H-%M-%S.%5N.pid" +
+                    keywords::file_name = path + "/running/" + "stat_%Y-%m-%d_%H-%M-%S.%5N.pid" +
                                           std::to_string (getpid() ) + ".log",
                     keywords::rotation_size = fileSize * 1024 * 1024,
                     keywords::time_based_rotation = sinks::file::rotation_at_time_point (0, 0, 0)
@@ -68,7 +68,7 @@ void Logger::init() {
     // text-backend for kms logger
     boost::shared_ptr< sinks::text_file_backend > app_backend =
             boost::make_shared< sinks::text_file_backend > (
-                    keywords::file_name = path + "/" + "app_%Y-%m-%d_%H-%M-%S.%5N.pid" +
+                    keywords::file_name = path + "/running/" + "app_%Y-%m-%d_%H-%M-%S.%5N.pid" +
                                           std::to_string (getpid() ) + ".log",
                     keywords::rotation_size = fileSize * 1024 * 1024,
                     keywords::time_based_rotation = sinks::file::rotation_at_time_point (0, 0, 0)

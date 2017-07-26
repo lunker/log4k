@@ -11,10 +11,11 @@
 extern "C" {
 #endif
 
+#define LOG(message) log4k_debug(message,message)
+
 typedef struct Logger Logger;
 
-//void log4k_debug(gchar* level, gchar * message);
-
+Logger* instance;
 void log4k_debug(char* level, char * message);
 
 #ifdef __cplusplus
