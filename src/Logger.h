@@ -65,7 +65,7 @@ private:
     m_logger_mt test_logger;
 };
 namespace test {
-    inline m_logger_mt test_logger2(keywords::channel="test");
+
 
     void test_logger2_debug(char* message);
 }

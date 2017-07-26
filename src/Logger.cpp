@@ -126,6 +126,4 @@ void Logger::TEST_LOG(char* message) {
     BOOST_LOG_SEV(app_logger::get(), warning) << "WOWOWOWOWOWOWOW";
     BOOST_LOG_SEV(app_logger::get(), warning) << std::string(message);
 }
-inline void test_logger2_debug(char* message){
-    BOOST_LOG_SEV(test::test_logger2, debug) << message;
-}
+
