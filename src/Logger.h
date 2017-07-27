@@ -56,16 +56,24 @@ class Logger {
 
 public:
     static void init();
-    Logger();
     void DEBUG(std::string channel, std::string message);
     void INFO();
     void LOG(std::string &level, std::string &message);
     static void TEST_LOG(char* message);
+
+		static Logger* get_logger(){
+			if(instance==NULL) instance=new Logger();
+			return instance;
+		}
+
 private:
-    m_logger_mt test_logger;
-};
-namespace test {
+	m_logger_mt test_logger;
+	static Logger* instance;
 
+	Logger();
+	~Logger();
+}; // end Class
 
-    void test_logger2_debug(char* message);
-}
+m_logger_mt test_logger ();
+void test_logger2_debug(char* message);
+void test_init();
