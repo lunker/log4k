@@ -18,7 +18,7 @@ typedef struct Logger Logger;
 // static Logger* instance;
 // Logger* instance;
 
-void log4k_debug(char* level, char * message);
+void log4k_debug(const char* level, const char * message);
 void log4k_singleton(char* message);
 
 #ifdef __cplusplus

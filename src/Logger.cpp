@@ -46,12 +46,12 @@ void init_file_collecting (boost::shared_ptr< sink_t > sink,
             keywords::min_free_space = fileSize * 1024 * 1024
     ) );
 }
+
 std::mutex mtx;
 Logger* Logger::instance = nullptr;
 Logger::Logger() {
     std::cout<<"Logger Constructor"<<std::endl;
     init();
-//		test_init();
 }
 
 Logger* Logger::get_logger(){
@@ -60,26 +60,71 @@ Logger* Logger::get_logger(){
 	return instance;
 }
 
+static void
+stat_formatter (logging::record_view const &rec,
+                  logging::formatting_ostream &strm)
+{
+  auto date_time_formatter = expr::stream
+                             << expr::format_date_time< boost::posix_time::ptime > ("TimeStamp",
+                                 "%Y-%m-%d %H:%M:%S,%f");
+  date_time_formatter (rec, strm) << " ";
+  strm << std::to_string (getpid() ) << " ";
+  strm << "[" <<
+       logging::extract< attrs::current_thread_id::value_type > ("ThreadID",
+           rec) << "] ";
+  strm << logging::extract< severity_level > ("Severity", rec) << " ";
+  strm << logging::extract< std::string > ("Category", rec) << " ";
+  strm << logging::extract< std::string > ("FileName", rec) << ":";
+  strm << logging::extract< int > ("Line", rec) << " ";
+  strm << logging::extract< std::string > ("Function", rec) << "() ";
+  strm << logging::extract< std::string > ("GObject", rec) << " ";
+  strm << rec[expr::smessage];
+}
+
+static void
+app_formatter (logging::record_view const &rec,
+                  logging::formatting_ostream &strm)
+{
+  auto date_time_formatter = expr::stream
+                             << expr::format_date_time< boost::posix_time::ptime > ("TimeStamp",
+                                 "%Y-%m-%d %H:%M:%S,%f");
+  date_time_formatter (rec, strm) << " ";
+  strm << std::to_string (getpid() ) << " ";
+  strm << "[" <<
+       logging::extract< attrs::current_thread_id::value_type > ("ThreadID",
+           rec) << "] ";
+  strm << logging::extract< severity_level > ("Severity", rec) << " ";
+  strm << logging::extract< std::string > ("Category", rec) << " ";
+  strm << logging::extract< std::string > ("FileName", rec) << ":";
+  strm << logging::extract< int > ("Line", rec) << " ";
+  strm << logging::extract< std::string > ("Function", rec) << "() ";
+  strm << logging::extract< std::string > ("GObject", rec) << " ";
+  strm << rec[expr::smessage];
+}
+
+
+
 void Logger::init() {
+
     // std::string path ="/Users/voiceloco";
     std::string path ="/home/lunker/logs";
     int fileSize=10;
-    int fileNumber=5;
+    int fileNumber=2;
     boost::shared_ptr< logging::core > core = logging::core::get();
 
     // text-backend for call history
     boost::shared_ptr< sinks::text_file_backend > stat_backend =
             boost::make_shared< sinks::text_file_backend > (
-                    keywords::file_name = path + "/running/" + "stat_%Y-%m-%d_%H-%M-%S.%5N.pid" +
-                                          std::to_string (getpid() ) + ".log",
+                    keywords::file_name = path + "/running/" + "stat_%Y-%m-%d.%5N" + ".log",
+										keywords::open_mode = std::ios_base::app|std::ios_base::out,
                     keywords::rotation_size = fileSize * 1024 * 1024,
                     keywords::time_based_rotation = sinks::file::rotation_at_time_point (0, 0, 0)
             );
     // text-backend for kms logger
     boost::shared_ptr< sinks::text_file_backend > app_backend =
             boost::make_shared< sinks::text_file_backend > (
-                    keywords::file_name = path + "/running/" + "app_%Y-%m-%d_%H-%M-%S.%5N.pid" +
-                                          std::to_string (getpid() ) + ".log",
+                    keywords::file_name = path + "/running/" + "app_%Y-%m-%d.%5N" + ".log",
+										keywords::open_mode = std::ios_base::app|std::ios_base::out,
                     keywords::rotation_size = fileSize * 1024 * 1024,
                     keywords::time_based_rotation = sinks::file::rotation_at_time_point (0, 0, 0)
             );
@@ -112,7 +157,9 @@ void Logger::init() {
     core->add_sink (app_sink);
 
     // set formatter to sink
-//    stat_sink->set_formatter (&system_formatter);
+    stat_sink->set_formatter (&stat_formatter);
+    app_sink->set_formatter (&app_formatter);
+		
 }
 
 void Logger::DEBUG (std::string channel, std::string message) {
@@ -128,64 +175,7 @@ void Logger::LOG(std::string &level, std::string &message) {
 
 }
 
-//////////////////////
-void test_init() {
-    // std::string path ="/Users/voiceloco";
-    std::string path ="/home/lunker/logs";
-    int fileSize=10;
-    int fileNumber=5;
-    boost::shared_ptr< logging::core > core = logging::core::get();
-
-    // text-backend for call history
-    boost::shared_ptr< sinks::text_file_backend > stat_backend =
-            boost::make_shared< sinks::text_file_backend > (
-                    keywords::file_name = path + "/running/" + "stat_%Y-%m-%d_%H-%M-%S.%5N.pid" +
-                                          std::to_string (getpid() ) + ".log",
-                    keywords::rotation_size = fileSize * 1024 * 1024,
-                    keywords::time_based_rotation = sinks::file::rotation_at_time_point (0, 0, 0)
-            );
-    // text-backend for kms logger
-    boost::shared_ptr< sinks::text_file_backend > app_backend =
-            boost::make_shared< sinks::text_file_backend > (
-                    keywords::file_name = path + "/running/" + "app_%Y-%m-%d_%H-%M-%S.%5N.pid" +
-                                          std::to_string (getpid() ) + ".log",
-                    keywords::rotation_size = fileSize * 1024 * 1024,
-                    keywords::time_based_rotation = sinks::file::rotation_at_time_point (0, 0, 0)
-            );
-
-    /* Enable auto-flushing after each log record written */
-    stat_backend->auto_flush (true);
-    app_backend->auto_flush (true);
-
-    stat_sink = boost::shared_ptr< sink_t > (new sink_t (stat_backend) );
-    app_sink = boost::shared_ptr< sink_t > (new sink_t (app_backend) );
-
-    stat_sink->set_filter (
-            expr::has_attr< std::string > ("Channel") &&
-            expr::attr< std::string > ("Channel") == "stat"
-    );
-    app_sink->set_filter (
-            expr::has_attr< std::string > ("Channel") &&
-            expr::attr< std::string > ("Channel") == "app"
-    );
-
-    /* Set up where the rotated files will be stored */
-    init_file_collecting (stat_sink, path + "/logs", fileSize, fileNumber);
-    init_file_collecting (app_sink, path + "/logs", fileSize, fileNumber);
-
-
-    /* Upon restart, scan the directory for files matching the file_name pattern */
-    stat_sink->locked_backend()->scan_for_files();
-    app_sink->locked_backend()->scan_for_files();
-
-    core->add_sink (stat_sink);
-    core->add_sink (app_sink);
-
-    // set formatter to sink
-//    stat_sink->set_formatter (&system_formatter);
-}
-
-void Logger::TEST_LOG(char* message) {
+void Logger::TEST_LOG(const char* message) {
     BOOST_LOG_SEV(app_logger::get(), warning) << "WOWOWOWOWOWOWOW";
     BOOST_LOG_SEV(app_logger::get(), warning) << std::string(message);
     BOOST_LOG_SEV(app_logger::get(), warning) << "count : " << count;

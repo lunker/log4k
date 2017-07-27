@@ -4,20 +4,12 @@ project(log4k)
 set(PROJECT_VERSION 1.0)
 set(PROJECT_NAME log4k)
 
-set(haha hahaaaaaa CACHE INTERNAL "test for variable")
-#add_subdirectory(src)
 include (GNUInstallDirs)
 
 # Debug message for cmake
-message("cmake_source_dir : ${CMAKE_SOURCE_DIR}")
-find_path(test_find_path NAME src/Logger.h;src/logger_interface.h PATH_SUFFIXES /usr/log4k HINTS /usr/log4k)
-
-message("test find path222333 : ${test_find_path}")
 
 set(CUSTOM_HINTS ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME} CACHE STRING "CUSTOM_HINTS")
 set(CUSTOM_PREFIX "${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}" CACHE STRING "cmake_prefix")
-#set(INCLUDE_PREFIX "${CMAKE_INSTALL_INCLUDEDIR}/${CUSTOM_PREFIX}/modules/${VALUE_NAME}")
-
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
@@ -33,13 +25,21 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 
 ## GLib
 FIND_PACKAGE(PkgConfig)
-PKG_CHECK_MODULES(GLIB2 REQUIRED glib-2.0>=2.36.0)
+PKG_CHECK_MODULES(glib2 REQUIRED glib-2.0>=2.36.0)
 #include_directories(${GLIB2_INCLUDE_DIRS})
+if(GLIB2_FOUND)
+	message("### find glib2")
+	include_directories(${GLIB2_INCLUDE_DIRS})
+else()
+	message("### no glib2")
+endif()
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
-    add_definitions (-DBOOST_ALL_DYN_LINK) # fuck
+    add_definitions (-DBOOST_ALL_DYN_LINK)
 endif()
+
+####End Setting Dependencies
 
 # Set Platform
 if(APPLE)
@@ -61,7 +61,7 @@ if (DEBUG)
     set_target_properties(log4k PROPERTIES COMPILE_FLAGS "-m64" LINK_FLAGS "-m64")
     target_link_libraries(log4k
             ${Boost_LIBRARIES}
-#            ${GLIB2_LIBRARIES}
+            ${GLIB2_LIBRARIES}
             )
 else()
     message("Build log4k as release mode")
@@ -98,7 +98,7 @@ else()
 
     target_link_libraries(log4k
             ${Boost_LIBRARIES}
-#            ${GLIB2_LIBRARIES}
+            ${GLIB2_LIBRARIES}
             )
 
     message("### CMAKE_INSTALL_INCLUDEDIR : ${CMAKE_INSTALL_INCLUDEDIR}")

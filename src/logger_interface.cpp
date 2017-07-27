@@ -9,7 +9,7 @@ extern "C" {
 
 	Logger* global_logger=Logger::get_logger();
 
-	void log4k_debug (char* channel, char* message){
+	void log4k_debug (const char* channel, const char* message){
 		char* tmp="hello global logger!";
 
 		global_logger->TEST_LOG(message);

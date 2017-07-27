@@ -12,6 +12,8 @@
 
 #include <boost/log/sources/basic_logger.hpp>
 
+#include <glib.h>
+
 namespace logging = boost::log;
 namespace attrs = boost::log::attributes;
 namespace src = boost::log::sources;
@@ -55,13 +57,16 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT (app_logger, m_logger_mt)
 class Logger {
 
 public:
-    static void init();
-    void DEBUG(std::string channel, std::string message);
-    void INFO();
-    void LOG(std::string &level, std::string &message);
-    void TEST_LOG(char* message);
+	static void init();
+	static Logger* get_logger();
+	void DEBUG(std::string channel, std::string message);
+	void INFO();
+	void LOG(std::string &level, std::string &message);
+	void TEST_LOG(const char* message);
 
-		static Logger* get_logger();
+	void register_relation(const char* p_name, const char* c_name);
+	void add_property(const gchar* node_name, const gchar* key, const gchar* value);
+
 
 private:
 	int count=1;
