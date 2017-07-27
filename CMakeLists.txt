@@ -51,10 +51,10 @@ if (DEBUG)
     message("Build log4k as debug mode")
 
     set(LOG4K_HEADER_FILES src/Logger.h src/logger_interface.h)
-    set(LOG4K_SOURCE_FILES src/Logger.cpp src/logger_interface.c test_main.cpp)
+    set(LOG4K_SOURCE_FILES src/Logger.cpp src/logger_interface.cpp test_main.cpp)
     add_executable(log4k ${LOG4K_HEADER_FILES} ${LOG4K_SOURCE_FILES})
 
-    set(SOURCE_FILES src/Logger.cpp src/Logger.h src/logger_interface.c src/logger_interface.h test_main.cpp)
+    set(SOURCE_FILES src/Logger.cpp src/Logger.h src/logger_interface.cpp src/logger_interface.h test_main.cpp)
     SET_SOURCE_FILES_PROPERTIES(${SOURCE_FILES} PROPERTIES LANGUAGE CXX)
 
     # create runnable binary for test lib
@@ -67,7 +67,7 @@ else()
     message("Build log4k as release mode")
 
     set(LOG4K_HEADER_FILES src/Logger.h src/logger_interface.h)
-    set(LOG4K_SOURCE_FILES src/Logger.cpp src/logger_interface.c)
+    set(LOG4K_SOURCE_FILES src/Logger.cpp src/logger_interface.cpp)
 
     foreach (HEADER ${LOG4K_HEADER_FILES})
         list (APPEND FIND_HEADERS ${HEADER})

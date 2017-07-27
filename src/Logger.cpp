@@ -16,6 +16,7 @@
 #include <boost/log/utility/manipulators/add_value.hpp>
 #include <sys/types.h>
 #include <unistd.h>
+#include <mutex>
 
 extern "C" {
 //#include "../interface/logger_interface.h"
@@ -45,11 +46,18 @@ void init_file_collecting (boost::shared_ptr< sink_t > sink,
             keywords::min_free_space = fileSize * 1024 * 1024
     ) );
 }
-
+std::mutex mtx;
+Logger* Logger::instance = nullptr;
 Logger::Logger() {
     std::cout<<"Logger Constructor"<<std::endl;
-//    init();
-		test_init();
+    init();
+//		test_init();
+}
+
+Logger* Logger::get_logger(){
+	mtx.lock();
+	if(instance==NULL) instance=new Logger();
+	return instance;
 }
 
 void Logger::init() {
@@ -178,13 +186,11 @@ void test_init() {
 }
 
 void Logger::TEST_LOG(char* message) {
-//		init();
     BOOST_LOG_SEV(app_logger::get(), warning) << "WOWOWOWOWOWOWOW";
     BOOST_LOG_SEV(app_logger::get(), warning) << std::string(message);
+    BOOST_LOG_SEV(app_logger::get(), warning) << "count : " << count;
+///    BOOST_LOG_SEV(app_logger::get(), warning) << "Current count : " + count;
+		std::cout<<count<<std::endl;
+		count++;
 }
 
-/*
-void TEST_LOG2(char* message){
-	BOOST_LOG_SEV(test_logger, warning) << std::string(message);
-}
-*/

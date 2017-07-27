@@ -59,14 +59,12 @@ public:
     void DEBUG(std::string channel, std::string message);
     void INFO();
     void LOG(std::string &level, std::string &message);
-    static void TEST_LOG(char* message);
+    void TEST_LOG(char* message);
 
-		static Logger* get_logger(){
-			if(instance==NULL) instance=new Logger();
-			return instance;
-		}
+		static Logger* get_logger();
 
 private:
+	int count=1;
 	m_logger_mt test_logger;
 	static Logger* instance;
 

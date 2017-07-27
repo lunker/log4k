@@ -12,8 +12,7 @@ extern "C" {
 	void log4k_debug (char* channel, char* message){
 		char* tmp="hello global logger!";
 
-		// instance->TEST_LOG(message);
-		global_logger->TEST_LOG(tmp);
+		global_logger->TEST_LOG(message);
 	}
 
 	void log4k_singletone(char* message){
