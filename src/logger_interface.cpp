@@ -9,13 +9,13 @@ extern "C" {
 
 	Logger* global_logger=Logger::get_logger();
 
-	void log4k_debug (const char* channel, const char* message){
-		char* tmp="hello global logger!";
+	void log4k_debug (const gchar* channel, const char* message){
+		gchar* tmp="hello global logger!";
 
 		global_logger->TEST_LOG(message);
 	}
 
-	void log4k_singletone(char* message){
+	void log4k_singletone(gchar* message){
 		
 	}
 }

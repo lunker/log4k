@@ -62,9 +62,9 @@ public:
 	void DEBUG(std::string channel, std::string message);
 	void INFO();
 	void LOG(std::string &level, std::string &message);
-	void TEST_LOG(const char* message);
+	void TEST_LOG(const gchar* message);
 
-	void register_relation(const char* p_name, const char* c_name);
+	void register_relation(const gchar* p_name, const char* c_name);
 	void add_property(const gchar* node_name, const gchar* key, const gchar* value);
 
 
@@ -78,5 +78,5 @@ private:
 }; // end Class
 
 m_logger_mt test_logger ();
-void test_logger2_debug(char* message);
+void test_logger2_debug(gchar* message);
 void test_init();

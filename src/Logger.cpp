@@ -175,7 +175,7 @@ void Logger::LOG(std::string &level, std::string &message) {
 
 }
 
-void Logger::TEST_LOG(const char* message) {
+void Logger::TEST_LOG(const gchar* message) {
     BOOST_LOG_SEV(app_logger::get(), warning) << "WOWOWOWOWOWOWOW";
     BOOST_LOG_SEV(app_logger::get(), warning) << std::string(message);
     BOOST_LOG_SEV(app_logger::get(), warning) << "count : " << count;

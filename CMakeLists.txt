@@ -26,12 +26,21 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 ## GLib
 FIND_PACKAGE(PkgConfig)
 PKG_CHECK_MODULES(glib2 REQUIRED glib-2.0>=2.36.0)
-#include_directories(${GLIB2_INCLUDE_DIRS})
-if(GLIB2_FOUND)
+PKG_CHECK_MODULES(glibmm-2.4 REQUIRED glibmm-2.4>=2.36.0)
+
+if(glib2_FOUND)
 	message("### find glib2")
-	include_directories(${GLIB2_INCLUDE_DIRS})
+	include_directories(${glib2_INCLUDE_DIRS})
 else()
 	message("### no glib2")
+endif()
+
+if(glibmm-2.4_FOUND)
+	message("### find glibmm-2.4")
+	message("### glibmm-2.4_INCLUDE_DIRS : ${glibmm-2.4_INCLUDE_DIRS}")
+	include_directories(${glibmm-2.4_INCLUDE_DIRS})
+else()
+	message("### no glibmm-2.4")
 endif()
 
 if(Boost_FOUND)
@@ -61,7 +70,8 @@ if (DEBUG)
     set_target_properties(log4k PROPERTIES COMPILE_FLAGS "-m64" LINK_FLAGS "-m64")
     target_link_libraries(log4k
             ${Boost_LIBRARIES}
-            ${GLIB2_LIBRARIES}
+            ${glib2_LIBRARIES}
+            ${glibmm-2.4_LIBRARIES}
             )
 else()
     message("Build log4k as release mode")
@@ -98,7 +108,8 @@ else()
 
     target_link_libraries(log4k
             ${Boost_LIBRARIES}
-            ${GLIB2_LIBRARIES}
+            ${glib2_LIBRARIES}
+            ${glibmm-2.4_LIBRARIES}
             )
 
     message("### CMAKE_INSTALL_INCLUDEDIR : ${CMAKE_INSTALL_INCLUDEDIR}")
@@ -115,7 +126,6 @@ else()
 
     install(
             TARGETS log4k
-#            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             RUNTIME DESTINATION bin
             LIBRARY DESTINATION lib
             ARCHIVE DESTINATION lib
