@@ -13,6 +13,7 @@
 #include <boost/log/sources/basic_logger.hpp>
 
 #include <glib.h>
+#include <map>
 
 namespace logging = boost::log;
 namespace attrs = boost::log::attributes;
@@ -23,11 +24,11 @@ namespace keywords = boost::log::keywords;
 
 
 enum severity_level {
-    error,
-    warning,
-    fixme,
-    info,
     debug,
+    info,
+    warning,
+    error,
+    fixme,
     trace,
     undefined
 };
@@ -59,24 +60,35 @@ class Logger {
 public:
 	static void init();
 	static Logger* get_logger();
+
 	void DEBUG(std::string channel, std::string message);
 	void INFO();
 	void LOG(std::string &level, std::string &message);
-	void TEST_LOG(const gchar* message);
+	void TEST_LOG( gchar* channel, guint level, gchar* message, gchar* func_name);
+	
+	void register_relation(gchar* p_name, gchar* c_name);
+	void add_property(gchar* element_name, gchar* key, gchar* value);
+	gchar* find_root(gchar* element_name);
 
-	void register_relation(const gchar* p_name, const char* c_name);
-	void add_property(const gchar* node_name, const gchar* key, const gchar* value);
+	/*	logging */
+	void log_with_level();
 
+	/* set log4k debug mode*/
+	void enable_debug();
+	void disable_debug();
+//	void is_debug();
 
 private:
-	int count=1;
-	m_logger_mt test_logger;
+
 	static Logger* instance;
+
+	gboolean is_debug=FALSE;
+	gint count=1;
+	std::map<gchar*, gchar* > r_map; // key : child_name, value: parent_name
+	std::map<gchar*, std::map<gchar*, gchar*>> prop_map;// hold property 
 
 	Logger();
 	~Logger();
+	void finalize();
 }; // end Class
 
-m_logger_mt test_logger ();
-void test_logger2_debug(gchar* message);
-void test_init();
